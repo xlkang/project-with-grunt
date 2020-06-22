@@ -14,7 +14,7 @@ const data = {
         name: '关于',
         link: '/about.html'
     }],
-    title: 'gulp样板页面',
+    title: 'grunt样板',
     pkg: require('./package.json'),
     dete: new Date()
 }
@@ -64,6 +64,28 @@ module.exports = grunt => {
                 files: {
                     // 输出路径： 源路径
                     'temp/assets/styles/main.css':'src/assets/styles/*.scss'
+                }
+            }
+        },
+        // 静态服务器
+        browserSync: {
+            dev: {
+                bsFiles: {
+                    src : [
+                        'temp/assets/styles/*.css',
+                        'temp/assets/scripts/*.js',
+                        'temp/**/*.html',
+                    ]
+                },
+                options: {
+                    notify: false,
+                    port: 3003,
+                    server: {
+                        baseDir: ['temp', 'src', 'public'],
+                        routes: {
+                            '/node_modules': 'node_modules'
+                        }
+                    }
                 }
             }
         },
