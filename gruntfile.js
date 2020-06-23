@@ -1,6 +1,6 @@
 // 实现这个项目的构建任务
 // "clean": "grunt clean",       -> 清除temp和dist目录文件
-// "lint": "grunt lint",         -> lint scipts
+// "lint": "grunt eslint",         -> lint scipts
 // "serve": "grunt serve",       -> 开发模式启动app并启动一个自动更新的web服务
 // "build": "grunt build",       -> 生产模式构建项目并且输出到dist目录
 // "start": "grunt start",       -> 生产模式启动项目
@@ -49,10 +49,11 @@ module.exports = grunt => {
                 }
             }
         },
-        // 
+        // grunt-eslint
         eslint: {
             target: ['src/assets/scripts/*.js']
         },
+        // grunt-contrib-sass编译sass
         sass: {
             options: {
                 implementation: {
@@ -60,11 +61,14 @@ module.exports = grunt => {
                 },
                 sourceMap: true
             },
-            main: {
-                files: {
-                    // 输出路径： 源路径
-                    'temp/assets/styles/main.css':'src/assets/styles/*.scss'
-                }
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/assets/styles',
+                    src: ['*.scss'],
+                    dest: 'temp/assets/styles',
+                    ext: '.css'
+                }]
             }
         },
         // 静态服务器
@@ -78,6 +82,7 @@ module.exports = grunt => {
                     ]
                 },
                 options: {
+                    watchTask: true,
                     notify: false,
                     port: 3003,
                     server: {
@@ -99,20 +104,28 @@ module.exports = grunt => {
                 tasks: ['sass']
             },
             html: {
-                files: ['src/assets/**/*.html'],
+                files: ['src/**/*.html'],
                 tasks: ['swigtemplates']
             }
         }
     })
-    
+
     // lint scipts
     grunt.registerTask('lint', ()=> {
         console.log('hello grunt~')
     })
+    grunt.registerTask('script', ['eslint', 'babel']);
+    grunt.registerTask('style', ['sass'])
+    grunt.registerTask('page', ['swigtemplates'])
+    grunt.registerTask('compile', ['script', 'style', 'page'])
     // 开发模式启动app并启动一个自动更新的web服务
-    grunt.registerTask('serve', ()=> {
-        console.log('hello grunt~')
-    })
+    grunt.registerTask('serve', [
+        'clean',
+        'compile',
+        'browserSync:dev',
+        'watch',
+    ]);
+
     // 生产模式构建项目并且输出到dist目录
     grunt.registerTask('build', ()=> {
         console.log('hello grunt~')

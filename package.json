@@ -49,9 +49,9 @@
     "grunt-babel": "^8.0.0",
     "grunt-browser-sync": "^2.2.0",
     "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-eslint": "^23.0.0",
-    "grunt-sass": "^3.1.0",
     "grunt-swigtemplates": "^0.1.2",
     "load-grunt-tasks": "^5.1.0",
     "sass": "^1.26.8"
